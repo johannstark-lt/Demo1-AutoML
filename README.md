@@ -1,5 +1,5 @@
 
-#Demo 1 project
+# Demo 1 project
 
 This project is about data extraction from Gmail using its API and then create a CSV.
 By now, there is only the extraction code.
