@@ -8,4 +8,4 @@ To start using, authorize using the API Enable panel in Google Cloud Platform AP
 
 Then just run
 
-    TextExtraction.js
+    node TextExtraction.js
