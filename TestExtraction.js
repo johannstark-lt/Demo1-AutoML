@@ -103,48 +103,57 @@ function listLabels(auth) {
   });
 }
 
+function getGmailMessage( configuration ) {
+   return new Promise((resolve, reject) => {
+        gmail.users.messages.list( configuration, (err, res) => {
+            if (err) {
+                reject( err );
+            } else {
+                resolve( res );
+            }
+        });
+   } );
+}
+
+function getGmailDetailMessage( configuration ) {
+   return new Promise( (resolve, reject) => {
+        gmail.users.messages.get( configuration, (err, res) => {
+          if (err) {
+              reject( err );
+          } else {
+              resolve( res );
+          }
+        });
+   } );
+} 
+
 /**
  * Extract 1 message of given label and display the text of its body
  *
  * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
  * @param {string} label Label ID to query messages.
  */
-function getMessages(auth, label) {
+async function getMessages(auth, label) {
   var item = {}, txtPkg = [];
   const gmail = google.gmail({version: 'v1', auth});
   //Query the message list of given label
-  gmail.users.messages.list({
-    userId: 'me',
-    maxResults: 1,
-    labelIds: label,
-  }, (err, res) => {
-    if (err) return console.log('The API returned an error: ' + err);
-    const msgs = res.data.messages;
-    if (msgs) {
-      //console.log('Messages adquired!');
-      // Iterate through the messages in raw format
-      msgs.forEach((msg) =>{
-        gmail.users.messages.get({
-          userId: 'me',
-          id: msg.id,
-          format: 'raw',
-        }, (err, res) => {
-          if (err) return console.log('The API returned an error: ' + err);
-          //console.log("Message Body: \n");
-          // Decode de raw format from base64url and then from html to text
-          let decodedInfo = base64url.decode(res.data.raw);
-          item.id = msg.id;
-          item.text = htmlToText(decodedInfo, {wordwrap: null});
-          console.log(htmlToText(decodedInfo, {wordwrap: null}));
-
-          // Add the item to the text package
-          txtPkg.push(item);
-        });
-      });
-    } else {
-      console.log('No mails found.');
-    }
-  });
+  const res = await getGmailMessage( { userId: 'me', maxResults: 1, labelIds: label } );
+  const msgs = res.data.messages;
+  if (msgs) {
+    //console.log('Messages adquired!');
+    // Iterate through the messages in raw format
+    txtPkg = msgs.map( async (msg) => {
+        const res = await getGmailDetailMessage( { userId: 'me', id: msg.id, format: 'raw' } );
+        let decodedInfo = base64url.decode(res.data.raw);
+        return {
+           id: msg.id,
+           text: htmlToText(decodedInfo, {wordwrap: null})
+        };
+    } );
+  } else {
+    console.log('No mails found.');
+  }
+  
   console.log(txtPkg);
   return txtPkg;
 }
