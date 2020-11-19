@@ -25,8 +25,9 @@ fs.readFile('client_secret.json', (err, content) => {
 });
 
 function main(auth) {
+    //Execute the methods
     listLabels(auth);
-    getMessages(auth, 'Label_1284463139380004146')
+    getMessages(auth, 'Label_1284463139380004146');
 }
 
 /** Docstring
@@ -92,9 +93,9 @@ function listLabels(auth) {
     if (err) return console.log('The API returned an error: ' + err);
     const labels = res.data.labels;
     if (labels.length) {
-      console.log('Labels:');
+      //console.log('Labels:');
       labels.forEach((label) => {
-        console.log(`- ${label.name} | ${label.id}`);
+        //console.log(`- ${label.name} | ${label.id}`);
       });
     } else {
       console.log('No labels found.');
@@ -109,6 +110,7 @@ function listLabels(auth) {
  * @param {string} label Label ID to query messages.
  */
 function getMessages(auth, label) {
+  var item = {}, txtPkg = [];
   const gmail = google.gmail({version: 'v1', auth});
   //Query the message list of given label
   gmail.users.messages.list({
@@ -119,7 +121,7 @@ function getMessages(auth, label) {
     if (err) return console.log('The API returned an error: ' + err);
     const msgs = res.data.messages;
     if (msgs) {
-      console.log('Messages adquired!');
+      //console.log('Messages adquired!');
       // Iterate through the messages in raw format
       msgs.forEach((msg) =>{
         gmail.users.messages.get({
@@ -128,14 +130,21 @@ function getMessages(auth, label) {
           format: 'raw',
         }, (err, res) => {
           if (err) return console.log('The API returned an error: ' + err);
-          console.log("Message Body: \n");
+          //console.log("Message Body: \n");
           // Decode de raw format from base64url and then from html to text
           let decodedInfo = base64url.decode(res.data.raw);
+          item.id = msg.id;
+          item.text = htmlToText(decodedInfo, {wordwrap: null});
           console.log(htmlToText(decodedInfo, {wordwrap: null}));
+
+          // Add the item to the text package
+          txtPkg.push(item);
         });
       });
     } else {
       console.log('No mails found.');
     }
   });
+  console.log(txtPkg);
+  return txtPkg;
 }
