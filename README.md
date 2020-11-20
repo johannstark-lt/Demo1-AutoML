@@ -20,4 +20,4 @@ Then just run
 
     node TextExtraction.js
 
-Last update: 19 Nov 2020
+Last update: 20 Nov 2020
