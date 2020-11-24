@@ -51,4 +51,12 @@ This file must be uploaded to a Google Storage Bucket in order to be imported in
 
 For further information please read: https://cloud.google.com/natural-language/automl/docs/prepare?_ga=2.137193078.-73856586.1605192318
 
+## About the business logistics8
+
+To get a better view about how to guide the effort of this project, here is the deal:
+
+We need to identify some parameter from each mail given by the shippers. This may come in countless forms within the body of the message. 
+
+In this GoogleDocs you will find the parameters we require to identify: https://docs.google.com/document/d/1F7UyblqWGAixb2pdPzcwI7LTxEpQrUjA4twX7Nv0F_8/edit?ts=5fac5ce3
+
 Last update: 24 Nov 2020
