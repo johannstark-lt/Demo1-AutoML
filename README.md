@@ -5,7 +5,9 @@ This project is about data extraction from Gmail using its API and then create a
 
 ## AutoML quickstart
 
-To get started with AutoML for entity extraction. First we need to understand what is AutoMl and what is capable of. To get more knowledge please use this Beginner's guide: https://cloud.google.com/natural-language/automl/docs/beginners-guide
+To get started with AutoML for entity extraction. First we need to understand what is AutoML and what is capable of.
+
+To get more knowledge please use this Beginner's guide: https://cloud.google.com/natural-language/automl/docs/beginners-guide
 
 Then, please read the following tutorial regarding entity extraction demo created by Google: https://cloud.google.com/natural-language/automl/docs/quickstart
 
@@ -37,12 +39,14 @@ To run it, just type in your terminal:
 
 The resultant JSON Lines will contain all the e-mail's id and text that matches the labels specified in the *getMessages* method. The format is according Google Cloud Platform parameters:
 
+```javascript
     let item = {
         'annotations': [],
         'text_snippet': {
             'content': <data>
         },
     }
+```
 
 ## Available functions
 All the following methods have a *auth* parameter that stands for an oAuth2Client object created by the *authorize* method.
@@ -82,4 +86,4 @@ In this GoogleDocs you will find the parameters we require to identify: https://
 
 Last update: 24 Nov 2020
 
-By Juanes at LeanTech with <3
+By Juanes at LeanTech with :heart_eyes:
