@@ -7,7 +7,7 @@ This project is about data extraction from Gmail using its API and then create a
 
 To get started with AutoML for entity extraction. First we need to understand what is AutoML and what is capable of.
 
-To get more knowledge please use this Beginner's guide: https://cloud.google.com/natural-language/automl/docs/beginners-guide
+To get more knowledge, please use this Beginner's guide: https://cloud.google.com/natural-language/automl/docs/beginners-guide
 
 Then, please read the following tutorial regarding entity extraction demo created by Google: https://cloud.google.com/natural-language/automl/docs/quickstart
 
@@ -29,23 +29,25 @@ The script will need you to specify a max number of results per label. **If no m
 
 To run it, just type in your terminal:
 
-    node TextExtraction.js <command> <maxResults>
+```console
+node TextExtraction.js <command> <maxResults>
 
-	-l : List the available labels.
-	-q : Query the mails for the given labels.
-	<maxResults> : Max number of mails.
+-l : List the available labels.
+-q : Query the mails for the given labels.
+<maxResults> : Max number of mails.
+```
 
 **The labels are hardcoded. If want to query different labels, please edit the code.**
 
 The resultant JSON Lines will contain all the e-mail's id and text that matches the labels specified in the *getMessages* method. The format is according Google Cloud Platform parameters:
 
 ```javascript
-    let item = {
-        'annotations': [],
-        'text_snippet': {
-            'content': <data>
-        },
-    }
+let item = {
+    'annotations': [],
+    'text_snippet': {
+        'content': <data>
+    },
+}
 ```
 
 ## Available functions
@@ -83,6 +85,8 @@ To get a better view about how to guide the effort of this project, here is the 
 We need to identify some parameter from each mail given by the shippers. This may come in countless forms within the body of the message.
 
 In this GoogleDocs you will find the parameters we require to identify: https://docs.google.com/document/d/1F7UyblqWGAixb2pdPzcwI7LTxEpQrUjA4twX7Nv0F_8/edit?ts=5fac5ce3
+
+___
 
 Last update: 24 Nov 2020
 
