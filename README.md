@@ -9,8 +9,11 @@ To get started with AutoML for entity extraction. First we need to understand wh
 
 Then, please read the following tutorial regarding entity extraction demo created by Google: https://cloud.google.com/natural-language/automl/docs/quickstart
 
-
 ## Our model
+
+At LeanTech's Research & Development, we want to create an automated way to extract mails with unpredictable structure and find useful information about shipments and quotes. To achieve this, we are using AutoML for entity extraction.
+
+The following project use the Gmail API to access a mail account and then format the information extracted as JSON Lines to create a dataset which will be used to train a custom model in AutoML.
 
 To start using, authorize using the API Enable panel in Google Cloud Platform API section and downloading the **client_secret.json (MUST BE NAMED LIKE THAT)**
 
