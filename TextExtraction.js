@@ -23,29 +23,34 @@ const TOKEN_PATH = 'token.json';
 // \s{2,} -> Clean multiple whitespaces
 const r1 = /(\r?\n\s|\r?\n){2,}|application\/pdf;.*$/g;
 const r2 = /\s{2,}/g;
+const args = process.argv.slice(2);
 
 // Load client secrets from a local file.
 fs.readFile('client_secret.json', (err, content) => {
-	console.log("Program initiated");
     if (err) return console.log('Error loading client secret file:', err);
-    // Authorize a client with credentials, then call the main program.
-    authorize(JSON.parse(content), main);
+	console.log("Program initiated");
+	// Authorize a client with credentials, then call the main program.
+	authorize(JSON.parse(content), main);
 });
 
 // Body of the program ------------------- //
 function main(auth) {
-	// Uncomment if you want to print a list of labels
-    //listLabels(auth);
 
-	// The actual fun is here :v
-	getMessages(auth, 'Label_1284463139380004146').then( result => {
-		//Query for other label. If necessary, comment this code
-		getMessages(auth, 'Label_1660852500093222718').then( result1 => {+
-			// Create the json lines file
-			fs.writeFileSync("dataset.jsonl", result+result1);
-		});
-
-    });
+	// -l -> List labels argument
+	// -q -> Query mails for given labels
+	if (args[0] == '-l') {
+		listLabels(auth);
+	} else if (args[0] == '-q') {
+		// The actual fun is here :v
+		getMessages(auth, 'Label_1284463139380004146', args[1]).then( result => {
+			//Query for other label. If necessary, comment this code
+			getMessages(auth, 'Label_1660852500093222718', args[1]).then( result1 => {+
+				// Create the json lines file
+				fs.writeFileSync("dataset.jsonl", result+result1);
+				console.log("\nDone!\n")
+			});
+	    });
+	}
 }
 
 // Functions ------------------------------ //
@@ -120,15 +125,16 @@ function listLabels(auth) {
     });
 }
 
-function getMailList( gmail, configuration ) {
+function getMailList( gmail, configuration, maxRes ) {
    return new Promise((resolve, reject) => {
-        gmail.users.messages.list( configuration, (err, res) => {
-            if (err) {
-                reject( err );
-            } else {
-                resolve( res );
-            }
-        });
+		if (maxRes != null) configuration["maxResults"] = maxRes;
+		gmail.users.messages.list( configuration, (err, res) => {
+		    if (err) {
+		        reject( err );
+		    } else {
+		        resolve( res );
+		    }
+		});
    } );
 }
 
@@ -149,15 +155,16 @@ function getMailContent( gmail, configuration ) {
  *
  * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
  * @param {string} label Label ID to query messages.
+ * @param {integer} maxResultsN max number of mails.
  */
-async function getMessages(auth, label) {
+async function getMessages(auth, label, maxResultsN) {
 	var jsonstring = "";
     const gmail = google.gmail({version: 'v1', auth});
     // Query the message list of given label
 	// For testing porpuses, add maxResults: 1
 	// to que gmail query.
-    const res = await getMailList( gmail, { userId: 'me',maxResults: 2 , labelIds: label } );
-    const msgs = res.data.messages;
+	const res = await getMailList( gmail, { userId: 'me', labelIds: label } , maxResultsN);
+	const msgs = res.data.messages;
     if (msgs) {
         console.log('Messages adquired for the label: '+label);
         // Iterate through the messages in raw format
@@ -183,7 +190,7 @@ async function getMessages(auth, label) {
             }
 			// Save it as a string and add the newlines
 			jsonstring = jsonstring+JSON.stringify(item)+"\n";
-			console.log(jsonstring);
+			//console.log(jsonstring);
         }
     } else {
         console.log('No mails found.');

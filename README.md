@@ -19,6 +19,22 @@ To start using, authorize using the API Enable panel in Google Cloud Platform AP
 
 Please read this to further explanation: https://developers.google.com/gmail/api/quickstart/nodejs
 
+Please to use the various methods of this script, uncomment and comment as desired.
+
+## The script
+
+The script will need you to specify a max number of results per label. **If no max Results, it will gather all available mails.**
+
+To run it, just type in your terminal:
+
+    node TextExtraction.js <command> <maxResults>
+
+	-l : List the available labels.
+	-q : Query the mails for the given labels.
+	<maxResults> : Max number of mails.
+
+**The labels are hardcoded. If want to query different labels, please edit the code.**
+
 The resultant JSON Lines will contain all the e-mail's id and text that matches the labels specified in the *getMessages* method. The format is according Google Cloud Platform parameters:
 
     let item = {
@@ -35,27 +51,32 @@ To extract each mail information:
 
 	// @param {google.auth.OAuth2} auth An authorized OAuth2 client.
     // @param {string} label Label ID to query messages.
-	getMessages(auth, label)
+	// @param {integer} maxResultsN max number of mails.
+	getMessages(auth, label, maxResultsN)
 
 To get a list of available lables, the *listLabels* method will do the job
 
     // @param {google.auth.OAuth2} auth An authorized OAuth2 client.
 	listLabels(auth)
 
-Then just run in your terminal
+The output is a JSON Lines file saved as *dataset.jsonl*. Also, must exists a CSV file that refers to these .jsonl files. This CSV it has to be imported at the AutoML console.
 
-    node TextExtraction.js
+The structure for the CSV file must be as shown below:
 
-The output is a JSON Lines file saved as *dataset.jsonl*
-This file must be uploaded to a Google Storage Bucket in order to be imported in the AutoML GUI Console.
+	<type of dataset>,<Google cloud storage URI>
+	TRAIN, gs://myBucket/dataset1.jsonl
+	TEST, gs://myBucket/dataset2.jsonl
+
+	If no split is gonna be made, just start the row with a comma to indicate the first column to be empty
+	, gs://myBucket/dataset.jsonl
 
 For further information please read: https://cloud.google.com/natural-language/automl/docs/prepare?_ga=2.137193078.-73856586.1605192318
 
-## About the business logistics8
+## About the business logic
 
 To get a better view about how to guide the effort of this project, here is the deal:
 
-We need to identify some parameter from each mail given by the shippers. This may come in countless forms within the body of the message. 
+We need to identify some parameter from each mail given by the shippers. This may come in countless forms within the body of the message.
 
 In this GoogleDocs you will find the parameters we require to identify: https://docs.google.com/document/d/1F7UyblqWGAixb2pdPzcwI7LTxEpQrUjA4twX7Nv0F_8/edit?ts=5fac5ce3
 
