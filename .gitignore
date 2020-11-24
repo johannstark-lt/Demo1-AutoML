@@ -4,7 +4,7 @@
 
 token.json
 client_secret.json
-dataset.csv
+dataset*
 
 # Dev space ----------------------------------
 # Created by https://www.toptal.com/developers/gitignore/api/windows,node

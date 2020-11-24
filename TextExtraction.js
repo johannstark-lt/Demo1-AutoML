@@ -1,6 +1,6 @@
-//TestExtraction.js
-//Demo 1
-//Created by Juanes at LeanTech
+// TestExtraction.js
+// Demo 1
+// Created by Juanes at LeanTech
 
 // Library loading
 const fs = require('fs');
@@ -16,12 +16,17 @@ const SCOPES = ['https://www.googleapis.com/auth/gmail.readonly'];
 // created automatically when the authorization flow completes for the first
 // time.
 const TOKEN_PATH = 'token.json';
-var dataPkg = [];
-//regex to clean the data
-const regex = /(\r?\n|\r){2,}/g;
+
+// Regex to clean the data | To test regex expression use: https://regex101.com/
+// (\r?\n\s|\r?\n){2,} -> Clean all useless break lines and whitespaces
+// application\/pdf;.*$ -> Clean PDF data from plan text
+// \s{2,} -> Clean multiple whitespaces
+const r1 = /(\r?\n\s|\r?\n){2,}|application\/pdf;.*$/g;
+const r2 = /\s{2,}/g;
 
 // Load client secrets from a local file.
 fs.readFile('client_secret.json', (err, content) => {
+	console.log("Program initiated");
     if (err) return console.log('Error loading client secret file:', err);
     // Authorize a client with credentials, then call the main program.
     authorize(JSON.parse(content), main);
@@ -33,21 +38,11 @@ function main(auth) {
     //listLabels(auth);
 
 	// The actual fun is here :v
-	getMessages(auth, 'Label_1284463139380004146', dataPkg).then( () => {
+	getMessages(auth, 'Label_1284463139380004146').then( result => {
 		//Query for other label. If necessary, comment this code
-		getMessages(auth, 'Label_1660852500093222718', dataPkg).then( () => {
-				//Test console
-				console.log(dataPkg);
-
-				// Finally, convert to CSV
-				// IF YOU NEED ONLINE 1 LABLE, CUT AND PASTE THE folowwing
-				// FOLLOWING CODE IN THE .then OF THE FIRST LABEL QUERY
-				converter.json2csv(dataPkg, (err, csv) => {
-					if (err) throw console.log("Failed. Error: "+err);
-					//Write the csv File
-					fs.writeFileSync('dataset.csv', csv);
-					console.log("Program terminated");
-				});
+		getMessages(auth, 'Label_1660852500093222718').then( result1 => {+
+			// Create the json lines file
+			fs.writeFileSync("dataset.jsonl", result+result1);
 		});
 
     });
@@ -155,34 +150,43 @@ function getMailContent( gmail, configuration ) {
  * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
  * @param {string} label Label ID to query messages.
  */
-async function getMessages(auth, label, dataList) {
-    var item = {};
+async function getMessages(auth, label) {
+	var jsonstring = "";
     const gmail = google.gmail({version: 'v1', auth});
     // Query the message list of given label
 	// For testing porpuses, add maxResults: 1
 	// to que gmail query.
-    const res = await getMailList( gmail, { userId: 'me', labelIds: label } );
+    const res = await getMailList( gmail, { userId: 'me',maxResults: 2 , labelIds: label } );
     const msgs = res.data.messages;
     if (msgs) {
         console.log('Messages adquired for the label: '+label);
         // Iterate through the messages in raw format
         for ( const msg of msgs ) {
 			// Query the details of each mail on the list
-            const res = await getMailContent( gmail, { userId: 'me', id: msg.id, format: 'raw' } );
+            const res = await getMailContent( gmail, { userId: 'me',id: msg.id, format: 'raw' } );
 			// Decode the body of the mail
 			let decodedInfo = base64url.decode(res.data.raw);
 
 			// Uncomment below for testing porpuses -----------------
 			//let auxStr = htmlToText(decodedInfo, {wordwrap: null}).replace(regex, "\n");
+			//let auxStr = auxStr.replace(pdfRemove, "");
 			//console.log(auxStr);
 
-			//Store the info in the JSON variable
-            dataList.push( {
-                id: msg.id,
-                text: htmlToText(decodedInfo, {wordwrap: null}).replace(regex, "\n")
-            } );
+			//Store the info in the JSON Googlecloud-formated variable
+            let item = {
+		        'annotations': [],
+		        'text_snippet': {
+		            'content': msg.id +" | "+ htmlToText(decodedInfo, {wordwrap: null})
+						.replace(r1, "\n")
+						.replace(r2, " ")
+		        },
+            }
+			// Save it as a string and add the newlines
+			jsonstring = jsonstring+JSON.stringify(item)+"\n";
+			console.log(jsonstring);
         }
     } else {
         console.log('No mails found.');
     }
+	return jsonstring;
 }
