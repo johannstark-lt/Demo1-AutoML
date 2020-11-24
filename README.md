@@ -109,4 +109,4 @@ When the model is ready. The AutoML console has a tab called **"TEST & USE"**. H
 ___
 
 Last update: 24 Nov 2020  
-Created with :heart: Juanes at LeanTech :rocket:
+Created with :heart: by Juanes at LeanTech :rocket:
