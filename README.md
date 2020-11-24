@@ -55,15 +55,19 @@ All the following methods have a *auth* parameter that stands for an oAuth2Clien
 
 To extract each mail information:
 
-	// @param {google.auth.OAuth2} auth An authorized OAuth2 client.
-    // @param {string} label Label ID to query messages.
-	// @param {integer} maxResultsN max number of mails.
-	getMessages(auth, label, maxResultsN)
+```javascript
+// @param {google.auth.OAuth2} auth An authorized OAuth2 client.
+// @param {string} label Label ID to query messages.
+// @param {integer} maxResultsN max number of mails.
+getMessages(auth, label, maxResultsN)
+```
 
 To get a list of available lables, the *listLabels* method will do the job
 
-    // @param {google.auth.OAuth2} auth An authorized OAuth2 client.
-	listLabels(auth)
+```javascript
+// @param {google.auth.OAuth2} auth An authorized OAuth2 client.
+listLabels(auth)
+```
 
 The output is a JSON Lines file saved as *dataset.jsonl*. Also, must exists a CSV file that refers to these .jsonl files. This CSV it has to be imported at the AutoML console.
 
