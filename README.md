@@ -21,7 +21,10 @@ To start using, authorize using the API Enable panel in Google Cloud Platform AP
 
 Please read this to further explanation: https://developers.google.com/gmail/api/quickstart/nodejs
 
-Now, to gain access to the project in Google Cloud Platform, please contact me at [jcamacho@lean-tech.io]{mailto:jcamacho@lean-tech.io}
+Now, to gain access to the project in Google Cloud Platform:
+* Create a GCP account first.
+* Enable a billing account.
+* Contact me at [jcamacho@lean-tech.io](mailto:jcamacho@lean-tech.io) regarding this project and your GCP Account address.
 
 Please to use the various methods of this script, uncomment and comment as desired.
 
