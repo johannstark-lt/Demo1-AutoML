@@ -1,6 +1,6 @@
 // TestExtraction.js
 // Demo 1
-// Created by Juanes at LeanTech
+// Created with love by Juanes at LeanTech
 
 // Library loading
 const fs = require('fs');
@@ -22,7 +22,7 @@ const TOKEN_PATH = 'token.json';
 // application\/pdf;.*$ -> Clean PDF data from plan text
 // \s{2,} -> Clean multiple whitespaces
 const r1 = /(\r?\n\s|\r?\n){2,}|application\/pdf;.*$/g;
-const r2 = /\s{2,}/g;
+const r2 = /\s{2,} | (\>\s)|(\s\>)/g;
 const r3 = /(\>\-){2,}/g;
 const args = process.argv.slice(2);
 
@@ -36,7 +36,6 @@ fs.readFile('client_secret.json', (err, content) => {
 
 // Body of the program ------------------- //
 function main(auth) {
-
 	// -l -> List labels argument
 	// -q -> Query mails for given labels
 	if (args[0] == '-l') {
@@ -174,12 +173,6 @@ async function getMessages(auth, label, maxResultsN) {
             const res = await getMailContent( gmail, { userId: 'me',id: msg.id, format: 'raw' } );
 			// Decode the body of the mail
 			let decodedInfo = base64url.decode(res.data.raw);
-
-			// Uncomment below for testing porpuses -----------------
-			//let auxStr = htmlToText(decodedInfo, {wordwrap: null}).replace(regex, "\n");
-			//let auxStr = auxStr.replace(pdfRemove, "");
-			//console.log(auxStr);
-
 			//Store the info in the JSON Googlecloud-formated variable
             let item = {
 		        'annotations': [],

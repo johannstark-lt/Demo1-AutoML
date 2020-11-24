@@ -1,5 +1,5 @@
 
-# Auto ML Entities extraction - Demo 1
+# Auto ML Entities extraction - Demo 1 :computer:
 
 This project is about data extraction from Gmail using its API and then create a JSON Lines file as a dataset for AutoML to be trained.
 
@@ -95,8 +95,18 @@ We need to identify some parameter from each mail given by the shippers. This ma
 
 In this GoogleDocs you will find the parameters we require to identify: https://docs.google.com/document/d/1F7UyblqWGAixb2pdPzcwI7LTxEpQrUjA4twX7Nv0F_8/edit?ts=5fac5ce3
 
+## What we need to develop now?
+
+* Acquire more useful and variable data from mails. Not just the same mail forwarded 5 times. Please.
+* To implement an algorithm which cleans the raw format of the message to get the most clear info possible.
+* An automatic way to create the CSV as this docs refers.
+* A piece of code to upload automatically the **.jsonl** files and the **CSV**. This will require a GCP sdk kit installed.
+* Maybe an piece of code to automatically label the data. (But that could also be ML haha)
+
+Once the model has been trained and deployed. We'll need to create a client for the AutoML API.
+When the model is ready. The AutoML console has a tab called **"TEST & USE"**. Here you will find how to use the custom model via a REST API or Python.
+
 ___
 
-Last update: 24 Nov 2020
-
-By Juanes at LeanTech with :heart_eyes:
+Last update: 24 Nov 2020  
+Created with :heart: Juanes at LeanTech :rocket:
