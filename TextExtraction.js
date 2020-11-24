@@ -23,6 +23,7 @@ const TOKEN_PATH = 'token.json';
 // \s{2,} -> Clean multiple whitespaces
 const r1 = /(\r?\n\s|\r?\n){2,}|application\/pdf;.*$/g;
 const r2 = /\s{2,}/g;
+const r3 = /(\>\-){2,}/g;
 const args = process.argv.slice(2);
 
 // Load client secrets from a local file.
@@ -186,6 +187,7 @@ async function getMessages(auth, label, maxResultsN) {
 		            'content': msg.id +" | "+ htmlToText(decodedInfo, {wordwrap: null})
 						.replace(r1, "\n")
 						.replace(r2, " ")
+						.replace(r3, "\n").substring(0, 9000)
 		        },
             }
 			// Save it as a string and add the newlines
