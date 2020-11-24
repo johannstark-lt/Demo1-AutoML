@@ -81,4 +81,5 @@ We need to identify some parameter from each mail given by the shippers. This ma
 In this GoogleDocs you will find the parameters we require to identify: https://docs.google.com/document/d/1F7UyblqWGAixb2pdPzcwI7LTxEpQrUjA4twX7Nv0F_8/edit?ts=5fac5ce3
 
 Last update: 24 Nov 2020
+
 By Juanes at LeanTech with <3
