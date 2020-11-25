@@ -101,6 +101,7 @@ In this GoogleDocs you will find the parameters we require to identify: https://
 * To implement an algorithm which cleans the raw format of the message to get the most clear info possible.
 * An automatic way to create the CSV as this docs refers.
 * A piece of code to upload automatically the **.jsonl** files and the **CSV**. This will require a GCP sdk kit installed.
+* Work with [DocAI](https://cloud.google.com/document-ai/docs/how-to?hl=en_US) in order to process scanned documents (or attached ones) and then use AutoML to extract entities.
 * Maybe an piece of code to automatically label the data. (But that could also be ML haha)
 
 Once the model has been trained and deployed. We'll need to create a client for the AutoML API.
